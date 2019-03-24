@@ -14,6 +14,7 @@ SRCS = src/rate_control.c
 TARGET = $(OUT_DIR)/lib_setrate.a
 
 all: $(TARGET)
+	cargo build
 
 run:
 	make

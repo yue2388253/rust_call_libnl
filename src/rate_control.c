@@ -38,7 +38,6 @@ int set_rate(int rate, int bucket) {
         return -2;
     }
 
-    // TODO: get the name of NIC by func getifaddr()
     link = rtnl_link_get_by_name(cache, "ens33");
     if_index = rtnl_link_get_ifindex(link);
 
@@ -52,12 +51,13 @@ int set_rate(int rate, int bucket) {
     /*
      * netem okay, htb okay, please comment
      * and uncomment the special parameters for the qdiscs
-    */
+     */
+    rtnl_qdisc_tbf_set_limit(q, rate);
     rtnl_qdisc_tbf_set_rate(q, rate, bucket, 0);
     /*
      * rtnl_netem_set_delay(q, 100);
      * rtnl_netem_set_loss(q, 10);
-    */
+     */
 
     rtnl_qdisc_add(sock, q, NLM_F_REPLACE);
 
@@ -65,6 +65,5 @@ int set_rate(int rate, int bucket) {
     nl_socket_free(sock);
     rtnl_link_put(link);
     nl_cache_put(cache);
-
     return 0;
 }

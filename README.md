@@ -10,6 +10,8 @@ This repository is a simple example of setting rate of the host by using bindgen
 
 **Simply run ```make run``` is enough.** This command would compile the c code and generate a static lib (*lib_setrate.a*) in directory *build*, and then run ```cargo run``` automatically.
 
-```make``` : only compile the static lib (*lib_setrate.a*)
+1. ```make``` : compile the static lib (*lib_setrate.a*) and run ```cargo build```. This command will generate a executable file named ***rust_call_libnl*** in directory(***target/build/***).  
+2. ```sudo ./target/build/rust_call_libnl```: require the user to set a rate and a bucket size, and then set it.
+3. ```tc qdisc show```: you will see the qdisc you set just now.
 
 ```make clean``` : clean all the stuff that the commands above generate.
