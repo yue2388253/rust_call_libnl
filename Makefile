@@ -16,10 +16,6 @@ TARGET = $(OUT_DIR)/lib_setrate.a
 all: $(TARGET)
 	cargo build
 
-run:
-	make
-	cargo run
-
 $(TARGET): $(OBJS)
 	rm -f $@
 	ar rcs $@ $(OBJS)
