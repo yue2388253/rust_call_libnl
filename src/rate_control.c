@@ -59,7 +59,7 @@ int set_rate(int rate, int bucket) {
      * rtnl_netem_set_loss(q, 10);
      */
 
-    rtnl_qdisc_add(sock, q, NLM_F_REPLACE);
+    rtnl_qdisc_add(sock, q, NLM_F_CREATE);
 
     rtnl_qdisc_put(q);
     nl_socket_free(sock);
