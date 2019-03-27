@@ -2,24 +2,30 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 use std::io;
 use std::process::Command;
-
-
 use std::ffi::CString;
 use std::os::raw::c_char;
 
 
 // Bytes in second
-unsafe fn call_add_qdisc_tbf(if_name : *const c_char,maj :u32, min :u32,limit :u32 ,rate :u32, bucket :u32)->i32{
-    let rate = rate * 1000 / 8;
+unsafe fn call_add_qdisc_tbf(
+    if_name : *const c_char,
+    maj: u32, min: u32,
+    limit: u32, rate: u32,
+    bucket: u32
+) -> i32 {
+    let rate = rate / 8 * 1000;
     let bucket = bucket;
-    add_qdisc_tbf(if_name,maj as i32,min as i32,limit as i32, rate as i32,
-               bucket as i32)
+    add_qdisc_tbf(if_name, maj as i32, min as i32,
+                  limit as i32, rate as i32, bucket as i32)
 }
 
-unsafe fn call_delete_qdisc(if_name : *const c_char,maj :u32, min :u32)->i32{
-    delete_qdisc(if_name, maj as i32,
-               min as i32)
+unsafe fn call_delete_qdisc(
+    if_name: *const c_char,
+    maj :u32, min :u32
+) -> i32 {
+    delete_qdisc(if_name, maj as i32, min as i32)
 }
+
 fn main() {
 	let if_name=CString::new("ens33").unwrap();
     let if_name_ptr=if_name.as_ptr();
@@ -29,10 +35,13 @@ fn main() {
         io::stdin().read_line(&mut rate)
             .expect("Failed to read line.");
         let rate = match rate.trim().as_ref() {
-            "" => unsafe{
-                	println!("->info delete_qdisc:err->{}",call_delete_qdisc(if_name_ptr,1,0));
-                	break;
-            	}
+            "" => {
+                unsafe {
+                    println!("->info delete_qdisc:err->{}", call_delete_qdisc(if_name_ptr, 1, 0));
+                    break;
+                }
+            }
+
             rate => {
                 rate.parse::<u32>()
                     .expect("Please input a positive integer.")
@@ -61,16 +70,10 @@ fn main() {
             }
         };
 
-
         //https://linux.die.net/man/8/tc-tbf
         unsafe {
         	println!("->info add_qdisc_tbf:err->{}",call_add_qdisc_tbf(if_name_ptr,1,0,queue_limit,rate, bucket));
     	};
-
-
-
-
-
 
         let qdisc_output = Command::new("tc")
             .arg("qdisc")
