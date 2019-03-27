@@ -3,7 +3,7 @@
 This repository is a simple example of setting rate of the host by using bindgen to call C lib [libnl3](https://www.infradead.org/~tgr/libnl/doc/core.html#core_netlink_fundamentals).
 
 # Prerequisite
-```sudo apt install libnl-3-dev libnl-route-3-dev libnl-route-3-dev libnfnetlink-dev```
+```sudo apt install libnl-3-dev libnl-genl-3-dev libnl-route-3-dev libnfnetlink-dev```
 
 
 # How to use this repo

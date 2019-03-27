@@ -15,7 +15,8 @@ fn main() {
 
     let bindings = bindgen::Builder::default()
         .header("wrapper.h")
-        .whitelist_function("set_rate")
+        .whitelist_function("add_qdisc_tbf")
+        .whitelist_function("delete_qdisc")
         .generate()
         .expect("unable to generate libnl bindings");
 
