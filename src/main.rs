@@ -37,7 +37,10 @@ fn main() {
         let rate = match rate.trim().as_ref() {
             "" => {
                 unsafe {
-                    println!("->info delete_qdisc:err->{}", call_delete_qdisc(if_name_ptr, 1, 0));
+                    let ret = call_delete_qdisc(if_name_ptr, 1, 0);
+                    if ret < 0 {
+                        println!("Error: failed to delete qdisc.(Code: {})", ret);
+                    }
                     break;
                 }
             }
@@ -58,6 +61,7 @@ fn main() {
                     .expect("Please input a positive integer.")
             }
         };
+
         let mut queue_limit = String::new();
         println!("Please input the queue_limit(bytes): ");
         io::stdin().read_line(&mut queue_limit)
@@ -72,7 +76,11 @@ fn main() {
 
         //https://linux.die.net/man/8/tc-tbf
         unsafe {
-        	println!("->info add_qdisc_tbf:err->{}",call_add_qdisc_tbf(if_name_ptr,1,0,queue_limit,rate, bucket));
+            let ret = call_add_qdisc_tbf(if_name_ptr,1,0,
+                                         queue_limit, rate, bucket);
+            if ret < 0 {
+                println!("Error: failed to set qdisc.(Code: {})", ret);
+            }
     	};
 
         let qdisc_output = Command::new("tc")
